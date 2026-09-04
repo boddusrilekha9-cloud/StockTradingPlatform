@@ -1,1 +1,116 @@
+import java.util.Scanner;
 
+class Stock {
+    String symbol;
+    double price;
+
+    Stock(String symbol, double price) {
+        this.symbol = symbol;
+        this.price = price;
+    }
+}
+
+class User {
+    String name;
+    double balance;
+    int shares;
+
+    User(String name, double balance) {
+        this.name = name;
+        this.balance = balance;
+        this.shares = 0;
+    }
+
+    void buyStock(Stock stock, int quantity) {
+        double cost = stock.price * quantity;
+
+        if (cost <= balance) {
+            balance = balance - cost;
+            shares = shares + quantity;
+            System.out.println("Stock bought successfully.");
+        } else {
+            System.out.println("Insufficient balance.");
+        }
+    }
+
+    void sellStock(Stock stock, int quantity) {
+        if (quantity <= shares) {
+            balance = balance + (stock.price * quantity);
+            shares = shares - quantity;
+            System.out.println("Stock sold successfully.");
+        } else {
+            System.out.println("You do not have enough shares.");
+        }
+    }
+
+    void displayPortfolio() {
+        System.out.println("\n----- Portfolio -----");
+        System.out.println("Name: " + name);
+        System.out.println("Balance: " + balance);
+        System.out.println("Shares: " + shares);
+    }
+}
+
+public class StockTradingPlatform {
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        Stock stock = new Stock("ABC", 100.00);
+
+        System.out.print("Enter your name: ");
+        String name = sc.nextLine();
+
+        User user = new User(name, 10000.00);
+
+        int choice;
+
+        do {
+            System.out.println("\n===== STOCK TRADING PLATFORM =====");
+            System.out.println("1. View Market Data");
+            System.out.println("2. Buy Stock");
+            System.out.println("3. Sell Stock");
+            System.out.println("4. View Portfolio");
+            System.out.println("5. Exit");
+            System.out.print("Enter your choice: ");
+
+            choice = sc.nextInt();
+
+            switch (choice) {
+
+                case 1:
+                    System.out.println("\n----- Market Data -----");
+                    System.out.println("Stock: " + stock.symbol);
+                    System.out.println("Price: " + stock.price);
+                    break;
+
+                case 2:
+                    System.out.print("Enter quantity to buy: ");
+                    int buyQuantity = sc.nextInt();
+                    user.buyStock(stock, buyQuantity);
+                    break;
+
+                case 3:
+                    System.out.print("Enter quantity to sell: ");
+                    int sellQuantity = sc.nextInt();
+                    user.sellStock(stock, sellQuantity);
+                    break;
+
+                case 4:
+                    user.displayPortfolio();
+                    break;
+
+                case 5:
+                    System.out.println("Thank you for using the Stock Trading Platform.");
+                    break;
+
+                default:
+                    System.out.println("Invalid choice.");
+            }
+
+        } while (choice != 5);
+
+        sc.close();
+    }
+}
